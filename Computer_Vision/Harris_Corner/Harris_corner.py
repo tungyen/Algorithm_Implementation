@@ -5,8 +5,11 @@ import math
 def Conv2(img, kernel):
     
     """
-    img: Input image for Gaussian Kernel Convolution
-    kernel: Matrix of Gaussian Kernel
+    Input:
+        img: Input image for Gaussian Kernel Convolution
+        kernel: Matrix of Gaussian Kernel
+    Output:
+        res: Image after the kernel convolution
     """
     
     img_new = np.copy(img).astype(np.float64)
@@ -28,10 +31,13 @@ def Conv2(img, kernel):
 def Harris_score_Cal(sq_Ix, sq_Iy, IxIy, param):
     
     """
-    sq_Ix: Square of gradient along the X-axis (for the whole image)
-    sq_Iy: Square of gradient along the y-axis (for the whole image)
-    IxIy: product of gradient along the X-axis and Y-axis (for the whole image)
-    param: k for the score equation
+    Input:
+        sq_Ix: Square of gradient along the X-axis (for the whole image)
+        sq_Iy: Square of gradient along the y-axis (for the whole image)
+        IxIy: product of gradient along the X-axis and Y-axis (for the whole image)
+        param: k for the score equation
+    Output:
+        score: The Harris score of the whole image
     """
     
     score = np.copy(sq_Ix)
@@ -45,10 +51,13 @@ def Harris_score_Cal(sq_Ix, sq_Iy, IxIy, param):
 def cornerMarking(img, score, wSize, thres=None):
     
     """
-    img: The original image
-    score: the matrix recording the V value of all pixels
-    wSize: window size for Non-Maximum-Suppression
-    thres: threshold for determining whether the pixel is a corner
+    Input:
+        img: The original image
+        score: the matrix recording the V value of all pixels
+        wSize: window size for Non-Maximum-Suppression
+        thres: threshold for determining whether the pixel is a corner
+    Output:
+        img_new: Image after the Harris Corner Detection
     """
     
     if thres == None:
@@ -67,7 +76,13 @@ def cornerMarking(img, score, wSize, thres=None):
     return img_new
 
 def test_Harris_Corner_Detection(path, name):
-
+    
+    """
+    Input:
+        path: Path of the input image
+        name: Name of the saving image
+    """
+    
     Sobel_X = np.array([[2,2,4,2,2], [1,1,2,1,1], [0,0,0,0,0], [-1,-1,-2,-1,-1], [-2,-2,-4,-2,-2]])
     Sobel_Y = np.array([[2,1,0,-1,-2], [2,1,0,-1,-2], [4,2,0,-2,-4], [2,1,0,-1,-2], [2,1,0,-1,-2]])
     Gaussain_Filter = np.array([[2,4,5,4,2], [4,9,12,9,4], [5,12,15,12,5], [4,9,12,9,4], [2,4,5,4,2]])/159

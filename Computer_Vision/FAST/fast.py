@@ -5,7 +5,10 @@ import cv2
 def findLongestBool(array):
     
     """
-    array: An array including only Bool value (True, False)
+    Input:
+        array: An array including only Bool value (True, False)
+    Output:
+        continuous_number: The longest number of continuous True in array
     """
     
     circular_array = array + array
@@ -19,14 +22,19 @@ def findLongestBool(array):
             mx = max(mx, cur)
             cur = 0
 
-    return min(mx, len(array))
+    continuous_number = min(mx, len(array))
+    return continuous_number
+
 
 def neighbors(img, row, col):
     
     """
-    img: The original image
-    row: The row of current pixel
-    col: The col of current pixel
+    Input:
+        img: The original image
+        row: The row of current pixel
+        col: The col of current pixel
+    Output:
+        nei: The 16 neighbors of the current pixel
     """
     
     p1 = img[row-3, col]
@@ -49,13 +57,17 @@ def neighbors(img, row, col):
     
     return nei
     
+
 def isCorner(img, row, col, thres):
     
     """
-    img: The original image
-    row: The row of current pixel
-    col: The col of current pixel
-    thres: the threshold for determine bright and dark pixel neighbors
+    Input:
+        img: The original image
+        row: The row of current pixel
+        col: The col of current pixel
+        thres: the threshold for determine bright and dark pixel neighbors
+    Output:
+        check: A boolean value that states Whether the pixel is a corner
     """
     
     sur = neighbors(img, row, col)
@@ -79,13 +91,17 @@ def isCorner(img, row, col, thres):
     if sum(bright_bool) < 12 and sum(dark_bool) < 12:
         return False
     
-    return findLongestBool(bright_bool) >= 12 or findLongestBool(dark_bool) >= 12
+    check = findLongestBool(bright_bool) >= 12 or findLongestBool(dark_bool) >= 12
+    return check
     
 def detect(img, thres):
     
     """
-    img: The original image
-    thres: the threshold for determine bright and dark pixel neighbors
+    Input:
+        img: The original image
+        thres: the threshold for determine bright and dark pixel neighbors
+    Output:
+        corners: All corners of the input image
     """
     
     corners = []
@@ -102,9 +118,12 @@ def detect(img, thres):
 def FASTscore(img, row, col):
     
     """
-    img: The original image
-    row: The row of current pixel
-    col: The col of current pixel
+    Input:
+        img: The original image
+        row: The row of current pixel
+        col: The col of current pixel
+    Output:
+        score: The score used for NMS of the whole image
     """
     
     img_new = np.copy(img).astype(np.float64)
@@ -115,9 +134,12 @@ def FASTscore(img, row, col):
 def NMS(img, corners, dis):
     
     """
-    img: The original image
-    corners: All detected corners
-    dis: The maximum distance that two corners could be neighbors
+    Input:
+        img: The original image
+        corners: All detected corners
+        dis: The maximum distance that two corners could be neighbors
+    Output:
+        corners: All corners of the image after the NMS
     """
     
     cur = 1
@@ -140,10 +162,11 @@ def NMS(img, corners, dis):
 def test_FAST(path, thres, dis, name):
     
     """
-    path: The path of the input image
-    thres: the threshold for determine bright and dark pixel neighbors
-    dis: The maximum distance that two corners could be neighbors
-    name: name of the ouput image
+    Input:
+        path: The path of the input image
+        thres: the threshold for determine bright and dark pixel neighbors
+        dis: The maximum distance that two corners could be neighbors
+        name: name of the ouput image
     """
       
     img = cv2.imread(path)

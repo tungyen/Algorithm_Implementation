@@ -6,8 +6,11 @@ import matplotlib.pyplot as plt
 def UniformQuantizationPartition(img, level):
     
     """
-    img: Input image for Uniform Quantization
-    level: The number of color zone you want to separate
+    Input:
+        img: Input image for Uniform Quantization
+        level: The number of color zone you want to separate
+    Output:
+        partition: The separating edge for Uniform Quantization
     """
     
     img_new = np.copy(img)
@@ -25,8 +28,11 @@ def UniformQuantizationPartition(img, level):
 def find_closest_color(c, partition):
     
     """
-    c: input color value (R or G or B)
-    partition: the uniform quantization partition for a 2D image
+    Input:
+        c: input color value (R or G or B)
+        partition: the uniform quantization partition for a 2D image
+    Output:
+        res: The closest color of the input color in the image
     """
     
     for j in range(len(partition)-1):
@@ -41,8 +47,11 @@ def find_closest_color(c, partition):
 def UniformQuantization(img, level):
     
     """
-    img: Input image for Uniform Quantization, cannot be the gray scale image
-    level: The number of color zone you want to separate
+    Input:
+        img: Input image for Uniform Quantization, cannot be the gray scale image
+        level: The number of color zone you want to separate
+    Output:
+        img_new: The image after Uniform Quantization
     """
     
     img_new = np.copy(img)
@@ -66,23 +75,30 @@ def UniformQuantization(img, level):
 def errorCalculate(target, error, gain, minPixel, maxPixel):
     
     """
-    target: the pixel that error disperse to
-    error: the difference between the old pixel and the pixel after find_closest_color
-    gain: the weight for the error-dispersion on the target
-    minPixel: the minimum pixel value in the original image
-    maxPixel: the maximum pixel value in the original image
+    Input:
+        target: the pixel that error disperse to
+        error: the difference between the old pixel and the pixel after find_closest_color
+        gain: the weight for the error-dispersion on the target
+        minPixel: the minimum pixel value in the original image
+        maxPixel: the maximum pixel value in the original image
+    Output:
+        newTarget: New value for the target after dispersing the error
     """
     
     diff = error*gain
     newTarget = target + diff
-    return np.uint8(np.clip(newTarget, minPixel, maxPixel))
+    newTarget = np.uint8(np.clip(newTarget, minPixel, maxPixel))
+    return newTarget
 
 
 def FSD(img, level):
     
     """
-    img: Input image for Floyd-Steinberg Dithering, cannot be the gray scale image
-    level: The number of color zone you want to separate
+    Input:
+        img: Input image for Floyd-Steinberg Dithering, cannot be the gray scale image
+        level: The number of color zone you want to separate
+    Output:
+        img_new: Image after the Floyd-Steinberg Dithering
     """
     
     img_new = np.copy(img)
