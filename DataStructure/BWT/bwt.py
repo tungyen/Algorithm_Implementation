@@ -1,37 +1,68 @@
 from collections import defaultdict
-input = "smnpbnnaaaaa$a"
-arr = [input]
 
-for i in range(len(input)-1):
-    tmp = input[-1] + input[:-1]
-    arr.append(tmp)
-    input = tmp
-
-arr = sorted(arr)
-print("Result arr: ", arr)
-
-res = ""
-for s in arr:
-    res  += s[-1]
+def bwt(str):
     
-print("Result string: ", res)
-
-BWT_dict = defaultdict(list)
-
-for i in range(len(arr)):
-    BWT_dict[arr[i][0]].append(i)
+    """
+    Input:
+        str: String, the input of the string to be transformed throught BWT
+    Output:
+        res: String, the result of BWT of the input string
+    """
     
-print("BWT Dict: ", BWT_dict)
+    curStr = str
+    allKinds = [curStr]
+
+    for _ in range(len(curStr)-1):
+        strTmp = curStr[-1] + curStr[:-1]
+        allKinds.append(strTmp)
+        curStr = strTmp
+
+    allKinds = sorted(allKinds)
+
+    res = ""
+    for s in allKinds:
+        res  += s[-1]
+    return res
+
+def invBWT(str):
     
-L2F = []
-index_desk = {}
-for c in res:
-    if c not in index_desk:
-        L2F.append(BWT_dict[c][0])
-        index_desk[c] = 1
-    else:
-        L2F.append(BWT_dict[c][index_desk[c]])
-        index_desk[c] += 1
+    """
+    Input:
+        str: String, the input of the string to be transformed throught BWT
+    Output:
+        res: String, the result of inverse BWT of the input string
+    """
+    
+    str_sort = sorted(str)
+    BWT_dict = defaultdict(list)
+    for i in range(len(str_sort)):
+        BWT_dict[str_sort[i]].append(i)
+    
+    sortToInput = {} 
+    index_desk = {}
+    for index, c in enumerate(str):
+        if c not in index_desk:
+            sortToInput[BWT_dict[c][0]] = index
+            index_desk[c] = 1
+        else:
+            sortToInput[BWT_dict[c][index_desk[c]]] = index
+            index_desk[c] += 1
+    
+    cur = sortToInput[0]
+    res = ""
+    
+    while len(res) != len(str):
+        res += str[sortToInput[cur]]
+        cur = sortToInput[cur]
         
-print(L2F)
+    return res
+
+input1 = "BANANA$"
+input2 = "ANNB$AA"
+
+bwtResult = bwt(input1)
+invBwtResult = invBWT(input2)
+
+print("BWT Result: ", bwtResult)
+print("Inverse BWT Result: ", invBwtResult)
 
