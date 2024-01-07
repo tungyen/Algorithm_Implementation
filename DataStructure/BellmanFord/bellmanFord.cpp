@@ -76,17 +76,22 @@ private:
 
 int main(){
 
-    BellmanFord BF = BellmanFord("g1.txt", 1);
+    BellmanFord BF = BellmanFord("g3.txt", 1);
     bool negativeCycle = BF.getShortestPath();
 
-    vector<int> svPath;
+    //vector<int> svPath;
+    vector<int> svPath = BF.getDistance();
     if(!negativeCycle){
-        svPath = BF.getDistance();
-        cout<<svPath[6]<<endl;
-        cout<<svPath[12]<<endl;
+        //svPath = BF.getDistance();
+        for(int i = 0;i<svPath.size();i++){
+            cout<<"The distance from src to vertex "<<i+1<<" is: "<<svPath[i]<<endl;
+        }
     }
     else{
         cout<<"There exists a negative cycle in the graph."<<endl;
+        for(int i = 0;i<svPath.size();i++){
+            cout<<"The distance from src to vertex "<<i+1<<" is: "<<svPath[i]<<endl;
+        }
     }
     return 0;
 }
